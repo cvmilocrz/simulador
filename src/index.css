@@ -1,0 +1,24 @@
+:root {
+  font-family:  system-ui;
+
+  overflow-x: hidden;
+
+  --color-1: #70b22a;
+  --color-2: #4b791a;
+  --invert: #8f4dd5;
+  --txt: rgb(82, 82, 82);
+  --dark-txt: black;
+  --grey-bg: #f4f4f4;
+
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  user-select: none;
+}
+
+body, html{
+  margin: 0;
+}
