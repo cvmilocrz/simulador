@@ -1,0 +1,40 @@
+.modalContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    align-items: center;
+    height: 100vh; 
+    margin-top: 100px;
+    color: var(--txt);
+}
+.contentTitle{
+    width: 80%;
+    text-align: left;
+    margin-left: 80px;
+}
+.contentTitle .modalTitle p{
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.valuesContent{
+    width: 80%;
+    text-align: left;
+    background-color: var(--grey-bg);
+}
+.modalContentUp, .modalContentBottom{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    align-items: left;
+    line-height: 0.5rem;
+    margin-left: 50px;
+}
+.modalContent {
+    width: 80%;
+  }
+  
+  .modalTable {
+    width: 100%;
+    text-align: center;
+  }
+  

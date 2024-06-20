@@ -8,6 +8,7 @@
     z-index: 1;
     margin-top: 2%;
     gap: 32px;
+    transform: translateY(50px);
 }
 
 .exclamationIco{
@@ -173,7 +174,7 @@
     align-items: center;
 }
 .footerRatesPlan{
-    display: none;
+    display: flex;
     flex-direction: row;
     justify-content: left;
     align-items: center;
