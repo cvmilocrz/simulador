@@ -5,6 +5,7 @@ import Modal from '../components/modal/modal'
 function Site (){
     return (
         <>  
+            <Navbar />
             <Home />
             <Modal />
         </>

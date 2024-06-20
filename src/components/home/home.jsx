@@ -13,7 +13,8 @@ function Home() {
     handleMontoCreditoChange,
     handleTasaEAChange,
     tasaMV,
-    formatNumberWithCommas
+    formatNumberWithCommas,
+    seguroVidaInitialValue
   } = useCreditSimulation();
 
   // Validar si montoCredito es un número válido
@@ -21,10 +22,10 @@ function Home() {
 
   // Cálculos
   const EApercetile = tasaEA / 100;
+
   const monthlyValue = isValidNumber
     ? (montoCredito * (tasaMV / 100)) /
-        (1 - Math.pow(1 + tasaMV / 100, -plazo)) +
-      seguroVida
+        (1 - Math.pow(1 + tasaMV / 100, -plazo)) + (seguroVida)
     : 0;
   const totalValue = isValidNumber ? monthlyValue * plazo : 0;
 
@@ -96,7 +97,7 @@ function Home() {
               <p>Tasa Mensual Vencida (M.V)</p>
             </div>
             <div className="valueInfo">
-              <p>{tasaMV.toFixed(2)} %</p>
+              <p>{tasaMV} %</p>
             </div>
           </div>
           <div className="intContainer">
@@ -104,12 +105,7 @@ function Home() {
               <p>Valor mensual del seguro de vida </p>
             </div>
             <div className="valueInfo">
-              <p>$</p>
-              <input
-                type="number"
-                value={seguroVida}
-                onChange={handleSeguroVida}
-              />
+              <p>${seguroVidaInitialValue}</p>
             </div>
           </div>
 

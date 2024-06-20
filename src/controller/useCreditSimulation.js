@@ -2,9 +2,11 @@
 import { useState } from 'react';
 
 const useCreditSimulation = () => {
+
+
   const [seguroVida, setSeguroVida] = useState(950);
-  const [plazo, setPlazo] = useState(6);
-  const [montoCredito, setMontoCredito] = useState(1000000);
+  const [plazo, setPlazo] = useState(60);
+  const [montoCredito, setMontoCredito] = useState(60000000);
   const [tasaEA, setTasaEA] = useState(20.00);
 
   const handleSeguroVida = (event) => {
@@ -29,8 +31,19 @@ const useCreditSimulation = () => {
 
   // Función para formatear números con separadores de miles
   const formatNumberWithCommas = (number) => {
-    return number.toLocaleString("es-ES");
+    return number.toLocaleString("es-ES", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
   };
+
+    // Validar si montoCredito es un número válido
+    const isValidNumber = !isNaN(montoCredito) && montoCredito !== 0;
+  
+    const monthlyValueModal = isValidNumber
+      ? (montoCredito * (tasaMV / 100)) /
+          (1 - Math.pow(1 + tasaMV / 100, -plazo)) + (seguroVida)
+      : 0;
+
+      const seguroVidaInitialValue = montoCredito * (0.00095);
+
 
   return {
     seguroVida,
@@ -42,7 +55,9 @@ const useCreditSimulation = () => {
     handleMontoCreditoChange,
     handleTasaEAChange,
     tasaMV,
-    formatNumberWithCommas
+    formatNumberWithCommas,
+    monthlyValueModal,
+    seguroVidaInitialValue
   };
 };
 

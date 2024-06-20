@@ -1,24 +1,60 @@
+import React from "react";
 import "./modal.css";
 import useCreditSimulation from "../../controller/useCreditSimulation";
 
-
 function Modal() {
-  const creditValueModal = 0;
-  const plazoModal = 0
-  const tasaEAModal = 0
-  const seguroVidaModal = 0
-  const tasaMVModal = 0
-  const test = 0
+  const {
+    seguroVida,
+    plazo,
+    montoCredito,
+    tasaEA,
+    tasaMV,
+    formatNumberWithCommas,
+  } = useCreditSimulation();
 
-  const formatNumberWithCommas = (number) => {
-    return number.toLocaleString("es-ES");
-  };
+  const creditValueModal = montoCredito;
+  const plazoModal = plazo;
+  const tasaEAModal = tasaEA;
+  const seguroVidaModal = seguroVida;
+  const tasaMVModal = tasaMV;
+  const isValidNumber = !isNaN(montoCredito) && montoCredito !== 0;
+  const monthlyValue = isValidNumber
+    ? (montoCredito * (tasaMV / 100)) /
+        (1 - Math.pow(1 + tasaMV / 100, -plazo)) +
+      seguroVida
+    : 0;
+  const totalValue = isValidNumber ? monthlyValue * plazo : 0;
+  const interestValue = totalValue - creditValueModal;
+
+  // Arrays para almacenar los datos de cada mes
+  let monthsData = [];
+
+  // Calculos para la tabla
+  let saldo = creditValueModal;
+  for (let i = 1; i <= plazoModal; i++) {
+    const monthInterestValue = saldo * (tasaMV / 100);
+    const monthlySeguroVidaValue = saldo * 0.00095;
+    const capitalQuote =
+      monthlyValue - monthInterestValue - monthlySeguroVidaValue;
+
+    // Agregar datos del mes actual al array
+    monthsData.push({
+      mes: i,
+      saldo: saldo,
+      interes: monthInterestValue,
+      seguroVida: monthlySeguroVidaValue,
+      abonoCapital: capitalQuote,
+    });
+
+    // Actualizar el saldo para el siguiente mes
+    saldo -= capitalQuote;
+  }
 
   return (
     <>
       <div className="modalContainer">
         <div className="contentTitle">
-          <div className="returnButton">regresar</div>
+          <div className="returnButton"></div>
           <div className="modalTitle">
             <p>Tasas y plan de pago</p>
           </div>
@@ -27,7 +63,7 @@ function Modal() {
           <div className="modalContentUp">
             <div className="contentUp">
               <h4>Valor del crédito</h4>
-              <p>${creditValueModal}</p>
+              <p>${formatNumberWithCommas(creditValueModal)}</p>
             </div>
             <div className="contentUp">
               <h4>Plazo</h4>
@@ -35,18 +71,21 @@ function Modal() {
             </div>
             <div className="contentUp">
               <h4>Tasa Efectiva Anual</h4>
-              <p>{tasaEAModal}%</p>
+              <p>{formatNumberWithCommas(tasaEAModal)}%</p>
             </div>
-            <div className="contentUpFiller"></div>
+            <div className="contentUp">
+              <h4>Tasa Mensual Vencida (M.V.)</h4>
+              <p>{tasaMVModal.toFixed(2)}%</p>
+            </div>
           </div>
           <div className="modalContentBottom">
             <div className="contentBotton">
-              <h4>Tasa Mensual Vencida (M.V.)</h4>
-              <p>{tasaMVModal}%</p>
+              <h4>Cuota Mensual</h4>
+              <p>${formatNumberWithCommas(monthlyValue)}</p>
             </div>
             <div className="contentBotton">
               <h4>Intereses</h4>
-              <p>$300.000</p>
+              <p>${formatNumberWithCommas(interestValue)}</p>
             </div>
             <div className="contentBotton">
               <h4>Seguro de vida</h4>
@@ -54,36 +93,35 @@ function Modal() {
             </div>
             <div className="contentBotton">
               <h4>En total pagarás:</h4>
-              <p>$1.000.000</p>
+              <p>${formatNumberWithCommas(totalValue)}</p>
             </div>
           </div>
         </div>
         <div className="modalContent">
           <table className="modalTable">
-            <thead className="">
+            <thead>
               <tr>
                 <th>Mes</th>
-                <th>Cuota Mensual</th>
+                <th>Saldo</th>
                 <th>Interés Mes Vencido</th>
                 <th>Seguro de Vida</th>
                 <th>Abono a Capital</th>
-                <th>Saldo</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>${test}</td>
-                <td>${test}</td>
-                <td>${test}</td>
-                <td>${test}</td>
-                <td>${test}</td>
-              </tr>
+              {monthsData.map((month) => (
+                <tr key={month.mes}>
+                  <td>{month.mes}</td>
+                  <td>${formatNumberWithCommas(month.saldo)}</td>
+                  <td>${formatNumberWithCommas(month.interes)}</td>
+                  <td>${formatNumberWithCommas(month.seguroVida)}</td>
+                  <td>${formatNumberWithCommas(month.abonoCapital)}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
       </div>
-      <div className="modalFooter"></div>
     </>
   );
 }
